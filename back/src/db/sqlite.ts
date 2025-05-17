@@ -26,15 +26,15 @@ export const run = async (
   }
 };
 
-export const fetch = async (
+export const fetch = async <T>(
   db: sqlite3.Database,
   sql: string,
   params: any[] = [],
 ) => {
-  return new Promise<any[]>((res, rej) => {
+  return new Promise<T[]>((res, rej) => {
     db.all(sql, params, (err, rows) => {
       if (err) rej(err);
-      res(rows);
+      res(rows as T[]);
     });
   });
 };

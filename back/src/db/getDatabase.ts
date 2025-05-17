@@ -7,6 +7,7 @@ import { exec } from "./sqlite.js";
 
 export function dbExists() {
   const dbPath = path.resolve(projectRoot, config.db.filename);
+  console.log(dbPath);
   return fs.existsSync(dbPath);
 }
 
@@ -23,6 +24,7 @@ export async function getDatabase(): Promise<sqlite3.Database> {
 
   if (isDbExists) return db;
 
+  console.log("initializing new db", config.db.filename);
   // initialize new db
   const schemaPath = resolveProjectPath("db", "timesheetsSchema.sql");
   const dataSql = fs.readFileSync(schemaPath).toString();

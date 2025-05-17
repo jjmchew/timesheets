@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { config } from "../config.js";
+import { config, testDbFilename } from "../config.js";
 import fs from "fs";
 import { resolveProjectPath, projectRoot } from "../utils/paths.js";
 import path from "path";
@@ -9,6 +9,23 @@ export function dbExists() {
   const dbPath = path.resolve(projectRoot, config.db.filename);
   console.log(dbPath);
   return fs.existsSync(dbPath);
+}
+
+export async function clearTestDb() {
+  return new Promise((res, rej) => {
+    const dbPath = path.resolve(projectRoot, testDbFilename);
+    if (fs.existsSync(dbPath)) {
+      fs.unlink(dbPath, (err) => {
+        if (err) {
+          console.error("clearTestDb error: ", err);
+          rej(err);
+        } else {
+          console.log(`${dbPath} deleted`);
+          res(true);
+        }
+      });
+    }
+  });
 }
 
 export async function getDatabase(): Promise<sqlite3.Database> {

@@ -6,8 +6,16 @@ export interface UserInfo {
 
 export interface ProjectInfo {
   id: number;
-  userId: number;
-  projectName: string;
+  user_id: number;
+  project_name: string;
   created_on: number;
-  display: boolean;
+  display: number; // 0 is false; 1 is true
+}
+
+export interface TimerInfo {
+  id: number;
+  project_id: number;
+  start_time: number;
+  end_time: number | null;
+  exported: number; // 0 is false; 1 is true
 }

@@ -1,7 +1,7 @@
 import { Database } from "sqlite3";
 import { getDatabase } from "../db/getDatabase.js";
 import { run, exec, fetch, close } from "../db/sqlite.js";
-import { UserInfo, ProjectInfo } from "../types/types.js";
+import { UserInfo, ProjectInfo, TimerInfo } from "../types/types.js";
 
 export class DbActions {
   private db: Database | null = null;
@@ -12,7 +12,7 @@ export class DbActions {
     Timers
    */
 
-  async addTimer({
+  async startTimer({
     projectName,
     startTime,
   }: {
@@ -29,9 +29,37 @@ export class DbActions {
     );
   }
 
+  async endTimer({
+    projectName,
+    endTime,
+  }: {
+    projectName: string;
+    endTime: number;
+  }) {
+    const projectInfo: ProjectInfo[] = await this.fetchProjectInfo(projectName);
+
+    const lastTimer = await this.fetchLastTimer(projectName);
+    console.dir(lastTimer);
+    return await this.run(
+      "UPDATE timers SET end_time = ? WHERE project_id=? AND id=?;",
+      endTime,
+      projectInfo[0].id,
+      lastTimer[0].id,
+    );
+  }
+
   async fetchAllTimers() {
     return await this.fetch("SELECT * from timers;");
   }
+
+  async fetchLastTimer(projectName: string): Promise<TimerInfo[]> {
+    const projectInfo: ProjectInfo[] = await this.fetchProjectInfo(projectName);
+    return (await this.fetch(
+      "SELECT * from timers WHERE end_time IS NULL and project_id=?;",
+      projectInfo[0].id,
+    )) as TimerInfo[];
+  }
+
   /*
     Projects
    */
@@ -53,16 +81,22 @@ export class DbActions {
     );
   }
 
-  async fetchAllProjects() {
-    return await this.fetch("SELECT * from projects;");
+  async fetchAllProjects(): Promise<ProjectInfo[]> {
+    return (await this.fetch("SELECT * from projects;")) as ProjectInfo[];
   }
 
   async fetchProjectInfo<ProjectInfo>(
     projectName: string,
   ): Promise<ProjectInfo[]> {
-    return (await this.fetch("SELECT * from projects where project_name=?;", [
-      projectName,
-    ])) as ProjectInfo[];
+    const projectInfo = (await this.fetch(
+      "SELECT * from projects where project_name=?;",
+      [projectName],
+    )) as ProjectInfo[];
+    if (projectInfo.length !== 1)
+      throw new Error(
+        `fetchProjectInfo: Problem with retrieving ${projectName}`,
+      );
+    return projectInfo;
   }
 
   /*
@@ -84,8 +118,8 @@ export class DbActions {
     );
   }
 
-  async fetchAllUsers() {
-    return await this.fetch("SELECT * from users;");
+  async fetchAllUsers(): Promise<UserInfo[]> {
+    return (await this.fetch("SELECT * from users;")) as UserInfo[];
   }
 
   async fetchUserInfo<UserInfo>(username: string): Promise<UserInfo[]> {

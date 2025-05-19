@@ -12,52 +12,118 @@ export class DbActions {
     Timers
    */
 
+  async hasNullTimer({
+    projectName,
+    projectId,
+  }: {
+    projectName?: string;
+    projectId?: number;
+  }): Promise<boolean> {
+    try {
+      await this.fetchNullTimer({ projectName, projectId });
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
   async startTimer({
     projectName,
+    projectId,
     startTime,
   }: {
-    projectName: string;
-    startTime: number;
+    projectName?: string;
+    projectId?: number;
+    startTime: string;
   }) {
-    const projectInfo: ProjectInfo[] = await this.fetchProjectInfo(projectName);
-    if (projectInfo.length !== 1)
-      throw new Error(`Problem with retrieving project ${projectName}`);
+    let projectId_lookup = projectId;
+
+    if (projectName) {
+      const projectInfo: ProjectInfo[] =
+        await this.fetchProjectInfo(projectName);
+      if (projectInfo.length !== 1)
+        throw new Error(
+          `startTimer: Problem with retrieving project ${projectName}`,
+        );
+      projectId_lookup = projectInfo[0].id;
+    }
+
+    const hasNullTimer = await this.hasNullTimer({ projectName });
+    if (hasNullTimer)
+      throw new Error(
+        `startTimer: An existing NullTimer exists for ${projectName}`,
+      );
+
     return await this.run(
       "INSERT INTO timers (project_id, start_time) VALUES (?, ?);",
-      projectInfo[0].id,
+      projectId_lookup,
       startTime,
     );
   }
 
   async endTimer({
     projectName,
+    projectId,
     endTime,
   }: {
-    projectName: string;
-    endTime: number;
+    projectName?: string;
+    projectId?: number;
+    endTime: string;
   }) {
-    const projectInfo: ProjectInfo[] = await this.fetchProjectInfo(projectName);
+    let projectId_lookup = projectId;
 
-    const lastTimer = await this.fetchLastTimer(projectName);
-    console.dir(lastTimer);
+    if (projectName) {
+      const projectInfo: ProjectInfo[] =
+        await this.fetchProjectInfo(projectName);
+      projectId_lookup = projectInfo[0].id;
+    }
+
+    const nullTimer = await this.fetchNullTimer({ projectName, projectId });
     return await this.run(
       "UPDATE timers SET end_time = ? WHERE project_id=? AND id=?;",
       endTime,
-      projectInfo[0].id,
-      lastTimer[0].id,
+      projectId_lookup,
+      nullTimer[0].id,
     );
   }
 
-  async fetchAllTimers() {
-    return await this.fetch("SELECT * from timers;");
+  async fetchTimersForProject({ projectId }: { projectId: number }) {
+    return (await this.fetch(
+      "SELECT * from timers WHERE project_id=?;",
+      projectId,
+    )) as TimerInfo[];
   }
 
-  async fetchLastTimer(projectName: string): Promise<TimerInfo[]> {
-    const projectInfo: ProjectInfo[] = await this.fetchProjectInfo(projectName);
-    return (await this.fetch(
+  async fetchAllTimers() {
+    return (await this.fetch("SELECT * from timers;")) as TimerInfo[];
+  }
+
+  async fetchNullTimer({
+    projectName,
+    projectId,
+  }: {
+    projectName?: string;
+    projectId?: number;
+  }): Promise<TimerInfo[]> {
+    let projectId_lookup = projectId;
+
+    if (projectName) {
+      const projectInfo: ProjectInfo[] =
+        await this.fetchProjectInfo(projectName);
+      projectId_lookup = projectInfo[0].id;
+    }
+
+    const nullTimer = (await this.fetch(
       "SELECT * from timers WHERE end_time IS NULL and project_id=?;",
-      projectInfo[0].id,
+      projectId_lookup,
     )) as TimerInfo[];
+
+    if (nullTimer.length === 0)
+      throw new Error(
+        `fetchNullTimer: could not find a null timer (i.e., no end time) for project "${projectName}`,
+      );
+
+    return nullTimer;
   }
 
   /*
@@ -85,6 +151,31 @@ export class DbActions {
     return (await this.fetch("SELECT * from projects;")) as ProjectInfo[];
   }
 
+  async fetchUsersProjects({
+    username,
+    id,
+  }: {
+    username?: string;
+    id?: number;
+  }): Promise<ProjectInfo[]> {
+    let userId = id;
+
+    if (username) {
+      const userInfo: UserInfo[] = await this.fetchUserInfo(username);
+      if (userInfo.length === 0) return [] as ProjectInfo[];
+      if (userInfo.length > 1)
+        throw new Error("Problem with retrieving username");
+      userId = userInfo[0].id;
+    }
+
+    if (!userId) return [] as ProjectInfo[];
+
+    return (await this.fetch(
+      "SELECT * from projects WHERE user_id=?",
+      userId,
+    )) as ProjectInfo[];
+  }
+
   async fetchProjectInfo<ProjectInfo>(
     projectName: string,
   ): Promise<ProjectInfo[]> {
@@ -110,7 +201,6 @@ export class DbActions {
     username: string;
     hashedPW: string;
   }) {
-    console.log(username, hashedPW);
     return await this.run(
       "INSERT INTO users (username, pw) VALUES (?, ?);",
       username,
@@ -144,7 +234,6 @@ export class DbActions {
   }
 
   private async run(sqlString: string, ...params: any[]) {
-    console.log("params:  ", params);
     const db = await this.getDb();
     const results = await run(db, sqlString, params);
     return results;

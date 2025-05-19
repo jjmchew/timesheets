@@ -7,6 +7,8 @@ const __dirname = path.dirname(__filename);
 // Root of the project (assuming this utils file is always under src/)
 export const projectRoot = path.resolve(__dirname, "..", "..");
 
+export const publicPath = path.join(projectRoot, "public");
+
 /**
  * Detect if we're running the code from src (TypeScript) or dist (compiled JS)
  */

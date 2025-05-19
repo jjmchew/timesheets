@@ -1,9 +1,10 @@
 import sqlite3 from "sqlite3";
-import { config, testDbFilename } from "../config.js";
+import { config, testDbFilename, isTest } from "../config.js";
 import fs from "fs";
 import { resolveProjectPath, projectRoot } from "../utils/paths.js";
 import path from "path";
 import { exec } from "./sqlite.js";
+import { insertInitialData } from "../utils/insertInitialData.js";
 
 export function dbExists() {
   const dbPath = path.resolve(projectRoot, config.db.filename);
@@ -42,10 +43,13 @@ export async function getDatabase(): Promise<sqlite3.Database> {
   if (isDbExists) return db;
 
   console.log("initializing new db", config.db.filename);
-  // initialize new db
+  // get path to schema file
   const schemaPath = resolveProjectPath("db", "timesheetsSchema.sql");
+  // read schema file
   const dataSql = fs.readFileSync(schemaPath).toString();
+  // create tables
   await exec(db, dataSql);
+  if (!isTest) await insertInitialData();
 
   return db;
 }

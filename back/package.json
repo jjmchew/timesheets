@@ -14,14 +14,20 @@
   "license": "ISC",
   "devDependencies": {
     "@types/express": "^5.0.1",
+    "@types/express-session": "^1.18.1",
+    "@types/lokijs": "^1.5.14",
     "@types/node": "^22.15.2",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3",
     "vitest": "^3.1.2"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.2.0",
+    "connect-loki": "^1.2.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "express-session": "^1.18.1",
     "sqlite3": "^5.1.7"
   }
 }

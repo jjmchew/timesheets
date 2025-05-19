@@ -1,17 +1,56 @@
 import express from "express";
+import session from "express-session";
+import connectLoki from "connect-loki";
 import type { Express } from "express";
+import { publicPath } from "./utils/paths.js";
 import { config } from "./config.js";
-import dbRouter from "./routes/dbRouter.js";
+import { isAuthenticated } from "./middleware/isAuthenticated.js";
+
+import { userRouter } from "./routes/userRouter.js";
+import { projectsRouter } from "./routes/projectsRouter.js";
+import { timersRouter } from "./routes/timersRouter.js";
+import { tallyRouter } from "./routes/tallyRouter.js";
+import { notFound } from "./views/notFound.js";
 
 const app: Express = express();
 let server: ReturnType<Express["listen"]>;
+const LokiStore = connectLoki(session);
 
 async function startServer(): Promise<void> {
   // Routes
-  app.use("/db", dbRouter);
-  app.use("/check", (req, res) => {
-    console.log("/", req);
-    res.status(200).json({ status: "ok" });
+  app.use(
+    session({
+      cookie: {
+        httpOnly: true,
+        maxAge: 31 * 24 * 60 * 60 * 1000, // 31 days in milliseconds
+        path: "/",
+        secure: false,
+      },
+      name: "timesheets-session-id",
+      resave: false,
+      saveUninitialized: true,
+      secret: config.sessionSecret,
+      store: new LokiStore({}),
+    }),
+  );
+
+  app.use(express.static(publicPath));
+  app.use(express.urlencoded());
+
+  app.use("/user", userRouter);
+  app.use("/projects", isAuthenticated, projectsRouter);
+  app.use("/timers", isAuthenticated, timersRouter);
+  app.use("/tally", isAuthenticated, tallyRouter);
+
+  app.get("/", (_req, res) => {
+    res.redirect("/user/login");
+  });
+
+  app.all("/:path", (req, res) => {
+    const path = req.params.path;
+    console.log(req.headers);
+    const referer = req.headers.referer || "";
+    res.send(notFound({ path, referer }));
   });
 
   // Start server
@@ -42,21 +81,3 @@ async function startApp(): Promise<void> {
 }
 
 startApp();
-
-// import { exec, run, fetch } from "./db/sqlite.js";
-// import { getDatabase } from "./db/getDatabase.js";
-//
-// const main = async () => {
-//   const db = await getDatabase();
-//   console.log("main1");
-//   console.log("main2");
-//   try {
-//     const results = await fetch(db, `SELECT * from users;`);
-//     console.log(results);
-//   } catch (err) {
-//     console.error(err);
-//   }
-//   db.close();
-// };
-//
-// main();

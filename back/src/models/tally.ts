@@ -44,7 +44,7 @@ export function tally(timers: TimerInfo[]) {
   const timeSpans: TimeSpan[] = convertTimers(timers);
   const result = calculateElapsedTime(timeSpans);
   console.dir(result);
-  return result;
+  return formatResult(result);
 }
 
 function convertTimers(timers: TimerInfo[]): TimeSpan[] {
@@ -55,4 +55,18 @@ function convertTimers(timers: TimerInfo[]): TimeSpan[] {
       end: new TZDate(timer.end_time, "America/Denver"),
     };
   });
+}
+
+function formatResult(result: Record<string, any>) {
+  let output = [];
+  const pad = (val: number) => val.toString().padStart(2, "0");
+
+  for (const [key, value] of Object.entries(result)) {
+    const hours = value?.hours || 0;
+    const minutes = value?.minutes || 0;
+    const seconds = value?.seconds || 0;
+    output.push(`${key} : ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`);
+  }
+
+  return output;
 }

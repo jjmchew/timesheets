@@ -32,7 +32,7 @@ userRouter.post("/login", async (req, res) => {
   res.status(401).send("Invalid credentials");
 });
 
-userRouter.get("/logout", (req, res) => {
+userRouter.post("/logout", (req, res) => {
   req.session.user = undefined;
   res.redirect("/");
 });

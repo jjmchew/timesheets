@@ -14,7 +14,16 @@ projectsRouter.get("/", async (req, res) => {
   const userId = req.session.user.id;
   const projects = await dbActions.fetchUsersProjects({ id: userId });
   const projectsListString: string = await projectsList({ projects });
-  res.send(layout({ title: "Projects" }, projectsListString));
+  res.send(
+    layout(
+      {
+        title: "Projects",
+        isAuthenticated: true,
+        username: req.session.user?.username,
+      },
+      projectsListString,
+    ),
+  );
 });
 
 projectsRouter.post("/:project_id/start", async (req, res) => {

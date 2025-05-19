@@ -1,7 +1,7 @@
 import type { Props } from "../types/types.js";
 
 export const layout = (
-  { title, isAuthenticated }: Props,
+  { title, isAuthenticated, username }: Props,
   children: string = "",
 ) => `
 <!DOCTYPE html>
@@ -18,21 +18,19 @@ export const layout = (
   <header>
       <h1>Timesheets</h1>
     <aside>
-      <div>aside</div>
     </aside>
       <div>
-        <span class="sm">why?</span>
         ${
           isAuthenticated
             ? `
+              <span class="sm">${username}</span>
               <form action="user/logout" method='post'>
                 <input class='lg' type='submit' value='Logout'>
               </form>
             `
-            : ""
+            : `<a class='lg attn' href="<%= BASE_URL %>/login">Login</a>`
         }
       </div>
-      <a class='lg attn' href="<%= BASE_URL %>/login">Login</a>
   </header>
 
   <main>

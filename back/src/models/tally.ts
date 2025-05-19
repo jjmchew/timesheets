@@ -1,6 +1,7 @@
 import { TimerInfo } from "../types/types.js";
 import { format, interval, intervalToDuration, add, Duration } from "date-fns";
-import { TZDate } from "@date-fns/tz";
+import { TZDateMini } from "@date-fns/tz";
+import type { TZDate } from "@date-fns/tz";
 
 interface TimeSpan {
   start: TZDate;
@@ -51,8 +52,8 @@ function convertTimers(timers: TimerInfo[]): TimeSpan[] {
   // convert UTC dates to MT (for elapsed time)
   return timers.map((timer: TimerInfo) => {
     return {
-      start: new TZDate(timer.start_time, "America/Denver"),
-      end: new TZDate(timer.end_time, "America/Denver"),
+      start: new TZDateMini(timer.start_time, "America/Denver"),
+      end: new TZDateMini(timer.end_time, "America/Denver"),
     };
   });
 }

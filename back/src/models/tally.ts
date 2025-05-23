@@ -162,9 +162,14 @@ function formatDurations(durations: Record<string, any>): string {
 function getHHMMSS(value: Duration) {
   const pad = (val: number) => val.toString().padStart(2, "0");
 
-  const hours = value?.hours || 0;
+  const days = value?.days || 0;
+  let hours = value?.hours || 0;
   const minutes = value?.minutes || 0;
   const seconds = value?.seconds || 0;
+
+  // don't want to see days - don't anticipate doing more than 99 hrs / week
+  if (days !== 0) hours += days * 24;
+
   return `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 

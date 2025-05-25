@@ -1,0 +1,13 @@
+[Unit]
+Description=Timesheets backend
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+Environment=NODE_ENV=production
+WorkingDirectory=/root/apps/timesheets-js/back
+ExecStart=/root/.nvm/versions/node/v20.11.0/bin/node /root/apps/timesheets-js/back/dist/index.js
+
+[Install]
+WantedBy=multi-user.target

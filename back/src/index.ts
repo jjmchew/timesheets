@@ -47,12 +47,13 @@ async function startServer(): Promise<void> {
   app.use(`${config.baseUrl}/tally`, isAuthenticated, tallyRouter);
 
   app.get(`${config.baseUrl}/`, (_req, res) => {
+    console.log("Received request at ${config.baseUrl}/ : redirecting...");
     res.redirect(`${config.baseUrl}/user/login`);
   });
 
   app.all(`${config.baseUrl}/:path`, (req, res) => {
     const path = req.params.path;
-    console.log(req.headers);
+    console.log(req.headers, req.originalUrl, req.baseUrl, req.path);
     const referer = req.headers.referer || "";
     res.send(notFound({ path, referer }));
   });

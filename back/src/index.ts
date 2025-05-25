@@ -60,7 +60,7 @@ async function startServer(): Promise<void> {
 
   // Start server
   server = app.listen({ port: config.port, host: "::" }, () => {
-    console.log(`Server listening on [::]${config.port}`);
+    console.log(`${config.env} Server listening on [::]${config.port}`);
   });
 }
 

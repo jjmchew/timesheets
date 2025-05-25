@@ -4,6 +4,7 @@ import { login } from "../views/login.js";
 import { hashPassword, comparePassword } from "../utils/userAuth.js";
 import { dbActions } from "../models/actions.js";
 import type { UserInfo } from "../types/types.js";
+import { config } from "../config.js";
 
 export const userRouter = Router();
 
@@ -26,7 +27,7 @@ userRouter.post("/login", async (req, res) => {
       username,
       id: userInfo[0].id,
     };
-    res.redirect("/projects");
+    res.redirect(`${config.baseUrl}/projects`);
     return;
   }
   res.status(401).send("Invalid credentials");

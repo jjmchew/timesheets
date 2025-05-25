@@ -26,4 +26,5 @@ export const config = {
   sessionSecret: process.env.SESSION_SECRET,
   username: process.env.USERNAME,
   pw: process.env.PW,
+  baseUrl: isProd ? "/timesheets" : "",
 } as const;

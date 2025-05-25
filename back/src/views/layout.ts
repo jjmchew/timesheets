@@ -1,4 +1,5 @@
 import type { Props } from "../types/types.js";
+import { config } from "../config.js";
 
 export const layout = (
   { title, isAuthenticated, username }: Props,
@@ -9,9 +10,9 @@ export const layout = (
 <head>
   <title>${title}</title>
   <meta charset='utf-8'>
-  <link rel='stylesheet' href="/stylesheets/css-reset.css">
-  <link rel='stylesheet' href="/stylesheets/app.css">
-  <link rel='icon' href="favicon-16x16.png" type='image/png'>
+  <link rel='stylesheet' href="${config.baseUrl}/stylesheets/css-reset.css">
+  <link rel='stylesheet' href="${config.baseUrl}/stylesheets/app.css">
+  <link rel='icon' href="${config.baseUrl}/favicon-16x16.png" type='image/png'>
 </head>
 
 <body>
@@ -24,11 +25,11 @@ export const layout = (
           isAuthenticated
             ? `
               <span class="sm">${username}</span>
-              <form action="user/logout" method='post'>
+              <form action="${config.baseUrl}/user/logout" method='post'>
                 <input class='lg' type='submit' value='Logout'>
               </form>
             `
-            : `<a class='lg attn' href="<%= BASE_URL %>/login">Login</a>`
+            : `<a class='lg attn' href="${config.baseUrl}/user/login">Login</a>`
         }
       </div>
   </header>

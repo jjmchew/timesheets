@@ -1,4 +1,5 @@
 import type { Props } from "../types/types.js";
+import { config } from "../config.js";
 
 export const notFound = ({ path, referer }: Props, _children: string = "") => `
 <!DOCTYPE html>
@@ -6,9 +7,9 @@ export const notFound = ({ path, referer }: Props, _children: string = "") => `
 <head>
   <title>Not Found</title>
   <meta charset='utf-8'>
-  <link rel='stylesheet' href="/stylesheets/css-reset.css">
-  <link rel='stylesheet' href="/stylesheets/app.css">
-  <link rel='icon' href="favicon-16x16.png" type='image/png'>
+  <link rel='stylesheet' href="${config.baseUrl}/stylesheets/css-reset.css">
+  <link rel='stylesheet' href="${config.baseUrl}/stylesheets/app.css">
+  <link rel='icon' href="${config.baseUrl}/favicon-16x16.png" type='image/png'>
 </head>
 
 <body>

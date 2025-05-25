@@ -1,14 +1,15 @@
 import type { Props, ProjectInfo } from "../types/types.js";
 import { dbActions } from "../models/actions.js";
+import { config } from "../config.js";
 
 const stopButton = ({ project_id }: Props) => `
-  <form action="/projects/${project_id}/stop" method='post'>
+  <form action="${config.baseUrl}/projects/${project_id}/stop" method='post'>
     <input class='stop' type='submit' value='Stop Timer'>
   </form>
 `;
 
 const startButton = ({ project_id }: Props) => `
-  <form action="/projects/${project_id}/start" method='post'>
+  <form action="${config.baseUrl}/projects/${project_id}/start" method='post'>
     <input class='start' type='submit' value='Start Timer'>
   </form>
 `;
@@ -26,9 +27,9 @@ const projectCard = async ({
       ${hasNullTimer ? stopButton({ project_id }) : startButton({ project_id })}
     </div>
     <div>
-      <a class='sm' href="/tally/${project_id}">Tally</a>
-      <a class='sm' href="/projects/${project_id}/csv">CSV</a>
-      <form action="/projects/${project_id}/hide" method='post'>
+      <a class='sm' href="${config.baseUrl}/tally/${project_id}">Tally</a>
+      <a class='sm' href="${config.baseUrl}/projects/${project_id}/csv">CSV</a>
+      <form action="${config.baseUrl}/projects/${project_id}/hide" method='post'>
         <input class='sm' type='submit' value='Hide'>
       </form>
     </div>

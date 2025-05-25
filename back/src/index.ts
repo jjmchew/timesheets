@@ -34,19 +34,23 @@ async function startServer(): Promise<void> {
     }),
   );
 
-  app.use(express.static(publicPath));
+  app.use(config.baseUrl, express.static(publicPath));
   app.use(express.urlencoded());
-
-  app.use("/user", userRouter);
-  app.use("/projects", isAuthenticated, projectsRouter);
-  app.use("/timers", isAuthenticated, timersRouter);
-  app.use("/tally", isAuthenticated, tallyRouter);
-
-  app.get("/", (_req, res) => {
-    res.redirect("/user/login");
+  app.use((_req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    next();
   });
 
-  app.all("/:path", (req, res) => {
+  app.use(`${config.baseUrl}/user`, userRouter);
+  app.use(`${config.baseUrl}/projects`, isAuthenticated, projectsRouter);
+  app.use(`${config.baseUrl}/timers`, isAuthenticated, timersRouter);
+  app.use(`${config.baseUrl}/tally`, isAuthenticated, tallyRouter);
+
+  app.get(`${config.baseUrl}/`, (_req, res) => {
+    res.redirect(`${config.baseUrl}/user/login`);
+  });
+
+  app.all(`${config.baseUrl}/:path`, (req, res) => {
     const path = req.params.path;
     console.log(req.headers);
     const referer = req.headers.referer || "";

@@ -4,6 +4,7 @@ import { dbActions } from "../models/actions.js";
 import { layout } from "../views/layout.js";
 import { projectsList } from "../views/projectsList.js";
 import type { ProjectInfo } from "../types/types.js";
+import { config } from "../config.js";
 
 export const projectsRouter = Router();
 
@@ -33,7 +34,7 @@ projectsRouter.post("/:project_id/start", async (req, res) => {
     startTime: new Date(Date.now()).toISOString(),
   });
   console.log(`/${project_id}/start: timer started`);
-  res.redirect("/projects");
+  res.redirect(`${config.baseUrl}/projects`);
 });
 
 projectsRouter.post("/:project_id/stop", async (req, res) => {
@@ -43,7 +44,7 @@ projectsRouter.post("/:project_id/stop", async (req, res) => {
     endTime: new Date(Date.now()).toISOString(),
   });
   console.log(`/${project_id}/stop: timer stopped`);
-  res.redirect("/projects");
+  res.redirect(`${config.baseUrl}/projects`);
 });
 
 projectsRouter.get("/all", async (req, res) => {

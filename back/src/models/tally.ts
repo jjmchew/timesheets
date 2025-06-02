@@ -20,8 +20,8 @@ export function tally(timers: TimerInfo[]) {
   console.dir(daily);
   console.dir(weekly);
   return twoColumns(
-    addHeader("DAILY", formatDurations(daily)),
-    addHeader("WEEKLY", formatDurations(weekly)),
+    addHeader("DAILY", formatDurationsDaily(daily)),
+    addHeader("WEEKLY", formatDurationsWeekly(weekly)),
   );
 }
 
@@ -137,14 +137,28 @@ function convertTimers(timers: TimerInfo[]): TimeSpan[] {
  * - "key : HH:MM:SS" on each line, sorted in descending order
  * - "key" is date (dd-MMM-YY) or week #
  */
-function formatDurations(durations: Record<string, any>): string {
+function formatDurationsDaily(durations: Record<string, any>): string {
   const tally = Object.entries(durations).map(([key, value]) => [
     key,
     getHHMMSS(value),
   ]);
 
   const output = tally
-    .sort(descending)
+    .sort(descendingDate)
+    .map((arr) => `${arr[0]} : ${arr[1]}`)
+    .join(`\n`);
+
+  return output;
+}
+
+function formatDurationsWeekly(durations: Record<string, any>): string {
+  const tally = Object.entries(durations).map(([key, value]) => [
+    key,
+    getHHMMSS(value),
+  ]);
+
+  const output = tally
+    .sort(descendingString)
     .map((arr) => `${arr[0]} : ${arr[1]}`)
     .join(`\n`);
 
@@ -174,7 +188,15 @@ function getHHMMSS(value: Duration) {
 }
 
 // Helper function for descending sort
-const descending = (a: string[], b: string[]) => {
+const descendingDate = (a: string[], b: string[]) => {
+  const dateA = new Date(a[0]);
+  const dateB = new Date(b[0]);
+  if (dateA > dateB) return -1;
+  else if (dateA < dateB) return 1;
+  return 0;
+};
+
+const descendingString = (a: string[], b: string[]) => {
   if (a[0] > b[0]) return -1;
   else if (a[0] < b[0]) return 1;
   return 0;

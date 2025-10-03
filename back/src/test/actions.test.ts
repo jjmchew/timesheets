@@ -172,7 +172,3 @@ describe("dbActions", async () => {
     });
   });
 });
-
-// console.log(await dbActions.fetchAllUsers());
-// console.log(await dbActions.fetchAllProjects());
-// console.log(await dbActions.fetchAllTimers());

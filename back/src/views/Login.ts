@@ -1,6 +1,6 @@
 import { config } from "../config.js";
 
-export const login = () => `
+export const Login = () => `
 <form class='txt_form' action="${config.baseUrl}/user/login" method='post'>
   <label for='username'>
     <span>Username</span>

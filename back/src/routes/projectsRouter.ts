@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { assertIsDefined } from "../utils/assertIsDefined.js";
 import { dbActions } from "../models/actions.js";
-import { layout } from "../views/layout.js";
-import { projectsList } from "../views/projectsList.js";
+import { BaseLayout } from "../views/BaseLayout.js";
+import { ProjectsList } from "../views/projectsList.js";
 import type { ProjectInfo } from "../types/types.js";
 import { config } from "../config.js";
 
@@ -14,9 +14,9 @@ projectsRouter.get("/", async (req, res) => {
 
   const userId = req.session.user.id;
   const projects = await dbActions.fetchUsersProjects({ id: userId });
-  const projectsListString: string = await projectsList({ projects });
+  const projectsListString: string = await ProjectsList({ projects });
   res.send(
-    layout(
+    BaseLayout(
       {
         title: "Projects",
         isAuthenticated: true,

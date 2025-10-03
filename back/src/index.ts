@@ -10,7 +10,7 @@ import { userRouter } from "./routes/userRouter.js";
 import { projectsRouter } from "./routes/projectsRouter.js";
 import { timersRouter } from "./routes/timersRouter.js";
 import { tallyRouter } from "./routes/tallyRouter.js";
-import { notFound } from "./views/notFound.js";
+import { NotFound } from "./views/NotFound.js";
 
 const app: Express = express();
 let server: ReturnType<Express["listen"]>;
@@ -47,7 +47,7 @@ async function startServer(): Promise<void> {
   app.use(`${config.baseUrl}/tally`, isAuthenticated, tallyRouter);
 
   app.get(`${config.baseUrl}/`, (_req, res) => {
-    console.log("Received request at ${config.baseUrl}/ : redirecting...");
+    console.log(`Received request at ${config.baseUrl}/ : redirecting...`);
     res.redirect(`${config.baseUrl}/user/login`);
   });
 
@@ -55,7 +55,7 @@ async function startServer(): Promise<void> {
     const path = req.params.path;
     console.log(req.headers, req.originalUrl, req.baseUrl, req.path);
     const referer = req.headers.referer || "";
-    res.send(notFound({ path, referer }));
+    res.send(NotFound({ path, referer }));
   });
 
   // Start server
@@ -65,7 +65,7 @@ async function startServer(): Promise<void> {
 }
 
 async function gracefulShutdown(signal: string): Promise<void> {
-  console.log(`${signal} signal received: closing HTTP server`);
+  console.log(`"${signal}" signal received: closing HTTP server`);
   server.close(() => {
     console.log("HTTP server closed");
   });

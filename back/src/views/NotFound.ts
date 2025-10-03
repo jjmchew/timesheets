@@ -1,7 +1,14 @@
-import type { Props } from "../types/types.js";
 import { config } from "../config.js";
 
-export const notFound = ({ path, referer }: Props, _children: string = "") => `
+interface NotFoundProps {
+  path: string;
+  referer: string;
+}
+
+export const NotFound = (
+  { path, referer }: NotFoundProps,
+  _children: string = "",
+) => `
 <!DOCTYPE html>
 <html lang='en'>
 <head>

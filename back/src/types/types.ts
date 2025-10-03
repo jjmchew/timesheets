@@ -20,7 +20,9 @@ export interface TimerInfo {
   exported: number; // 0 is false; 1 is true
 }
 
+/*
 export interface Props {
   projects?: ProjectInfo[];
   [key: string]: any;
 }
+*/

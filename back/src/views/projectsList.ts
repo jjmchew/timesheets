@@ -1,30 +1,39 @@
-import type { Props, ProjectInfo } from "../types/types.js";
+import type { ProjectInfo } from "../types/types.js";
 import { dbActions } from "../models/actions.js";
 import { config } from "../config.js";
 
-const stopButton = ({ project_id }: Props) => `
-  <form action="${config.baseUrl}/projects/${project_id}/stop" method='post'>
+interface ButtonProps {
+  project_id: number;
+}
+const StopButton = ({ project_id }: ButtonProps) => `
+  <form action="${config.baseUrl}/projects/${project_id.toString()}/stop" method='post'>
     <input class='stop' type='submit' value='Stop Timer'>
   </form>
 `;
 
-const startButton = ({ project_id }: Props) => `
-  <form action="${config.baseUrl}/projects/${project_id}/start" method='post'>
+const StartButton = ({ project_id }: ButtonProps) => `
+  <form action="${config.baseUrl}/projects/${project_id.toString()}/start" method='post'>
     <input class='start' type='submit' value='Start Timer'>
   </form>
 `;
 
-const projectCard = async ({
+interface ProjectCardProps {
+  project_name: string;
+  project_id: number;
+  hasNullTimer: boolean;
+}
+
+const ProjectCard = async ({
   project_name,
   project_id,
   hasNullTimer,
-}: Props) => `
+}: ProjectCardProps) => `
   <li>
     <div class='project_name'>
       ${project_name}
     </div>
     <div>
-      ${hasNullTimer ? stopButton({ project_id }) : startButton({ project_id })}
+      ${hasNullTimer ? StopButton({ project_id }) : StartButton({ project_id })}
     </div>
     <div>
       <a class='sm' href="${config.baseUrl}/tally/${project_id}">Tally</a>
@@ -42,7 +51,7 @@ const renderCards = async (projects: ProjectInfo[]) => {
     const hasNullTimer = await dbActions.hasNullTimer({
       projectName: project.project_name,
     });
-    out += await projectCard({
+    out += await ProjectCard({
       project_name: project.project_name,
       project_id: project.id,
       hasNullTimer,
@@ -51,7 +60,11 @@ const renderCards = async (projects: ProjectInfo[]) => {
   return out;
 };
 
-export const projectsList = async ({ projects }: Props) => `
+interface ProjectsListProps {
+  projects: ProjectInfo[];
+}
+
+export const ProjectsList = async ({ projects }: ProjectsListProps) => `
 <ul>
   ${projects ? await renderCards(projects) : ""}
 </ul>

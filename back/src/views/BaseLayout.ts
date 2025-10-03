@@ -1,8 +1,13 @@
-import type { Props } from "../types/types.js";
 import { config } from "../config.js";
 
-export const layout = (
-  { title, isAuthenticated, username }: Props,
+interface BaseLayoutProps {
+  title: string;
+  isAuthenticated?: boolean;
+  username?: string;
+}
+
+export const BaseLayout = (
+  { title, isAuthenticated = false, username }: BaseLayoutProps,
   children: string = "",
 ) => `
 <!DOCTYPE html>

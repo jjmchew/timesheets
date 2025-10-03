@@ -1,6 +1,6 @@
 import { Database } from "sqlite3";
 import { getDatabase } from "../db/getDatabase.js";
-import { run, exec, fetch, close } from "../db/sqlite.js";
+import { run, fetch, close } from "../db/sqlite.js";
 import { UserInfo, ProjectInfo, TimerInfo } from "../types/types.js";
 
 export class DbActions {

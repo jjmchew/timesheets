@@ -140,6 +140,7 @@ export class DbActions {
     const userInfo: UserInfo[] = await this.fetchUserInfo(username);
     if (userInfo.length !== 1)
       throw new Error("Problem with retrieving username");
+
     return await this.run(
       "INSERT INTO projects (project_name, user_id) VALUES (?, ?);",
       projectName,
@@ -235,8 +236,7 @@ export class DbActions {
 
   private async run(sqlString: string, ...params: any[]) {
     const db = await this.getDb();
-    const results = await run(db, sqlString, params);
-    return results;
+    return await run(db, sqlString, params);
   }
 
   private async fetch(sqlString: string, ...params: any[]) {

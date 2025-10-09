@@ -1,4 +1,4 @@
-import { dbActions } from "../models/actions.js";
+import { dbActions } from "../models/dbActions.js";
 import { hashPassword } from "./userAuth.js";
 import { config } from "../config.js";
 

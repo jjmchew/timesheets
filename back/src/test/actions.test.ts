@@ -1,6 +1,6 @@
 import { describe, expect, test, beforeAll, afterAll } from "vitest";
 import { clearTestDb } from "../db/getDatabase.js";
-import { dbActions } from "../models/actions.js";
+import { dbActions } from "../models/dbActions.js";
 import { UserInfo, ProjectInfo, TimerInfo } from "../types/types.js";
 
 beforeAll(async () => {

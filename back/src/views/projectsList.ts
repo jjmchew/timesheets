@@ -1,7 +1,10 @@
 import type { ProjectInfo } from "../types/types.js";
-import { dbActions } from "../models/actions.js";
+import { dbActions } from "../models/dbActions.js";
 import { config } from "../config.js";
 
+/*
+ * Buttons
+ */
 interface ButtonProps {
   project_id: number;
 }
@@ -17,6 +20,9 @@ const StartButton = ({ project_id }: ButtonProps) => `
   </form>
 `;
 
+/*
+ * Individual Cards
+ */
 interface ProjectCardProps {
   project_name: string;
   project_id: number;
@@ -60,6 +66,9 @@ const renderCards = async (projects: ProjectInfo[]) => {
   return out;
 };
 
+/*
+ * Primary list of projects
+ */
 interface ProjectsListProps {
   projects: ProjectInfo[];
 }

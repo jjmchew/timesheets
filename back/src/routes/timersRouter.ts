@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
-import { dbActions } from "../models/actions.js";
+import { dbActions } from "../models/dbActions.js";
 
 export const timersRouter = Router();
 

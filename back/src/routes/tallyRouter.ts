@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { dbActions } from "../models/actions.js";
+import { dbActions } from "../models/dbActions.js";
 import { tally } from "../models/tally.js";
 
 export const tallyRouter = Router();

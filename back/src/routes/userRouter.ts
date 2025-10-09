@@ -2,7 +2,7 @@ import { Router } from "express";
 import { BaseLayout } from "../views/BaseLayout.js";
 import { Login } from "../views/Login.js";
 import { comparePassword } from "../utils/userAuth.js";
-import { dbActions } from "../models/actions.js";
+import { dbActions } from "../models/dbActions.js";
 import type { UserInfo } from "../types/types.js";
 import { config } from "../config.js";
 

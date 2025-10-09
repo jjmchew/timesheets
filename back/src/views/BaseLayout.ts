@@ -23,8 +23,17 @@ export const BaseLayout = (
 <body>
   <header>
       <h1>Timesheets</h1>
-    <aside>
-    </aside>
+      <nav>
+        ${
+          isAuthenticated
+            ? `
+              <form action="${config.baseUrl}/projects/new" method='get'>
+                <input class='sm' type='submit' value='Add Project'>
+              </form>
+            `
+            : ""
+        }
+      </nav>
       <div>
         ${
           isAuthenticated

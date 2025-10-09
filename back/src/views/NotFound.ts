@@ -5,10 +5,7 @@ interface NotFoundProps {
   referer: string;
 }
 
-export const NotFound = (
-  { path, referer }: NotFoundProps,
-  _children: string = "",
-) => `
+export const NotFound = ({ path, referer }: NotFoundProps) => `
 <!DOCTYPE html>
 <html lang='en'>
 <head>

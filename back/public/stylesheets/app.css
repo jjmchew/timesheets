@@ -222,6 +222,7 @@ li > div {
   display: flex;
   justify-content: center;
   margin: auto;
+  align-items: baseline;
 }
 .project_name {
   width: 25ch;

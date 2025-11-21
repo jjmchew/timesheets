@@ -172,9 +172,16 @@ export class DbActions {
     if (!userId) return [] as ProjectInfo[];
 
     return (await this.fetch(
-      "SELECT * from projects WHERE user_id=?",
+      "SELECT * from projects WHERE user_id=? and display=true",
       userId,
     )) as ProjectInfo[];
+  }
+
+  async hideProject({ projectId }: { projectId: number }) {
+    return await this.fetch(
+      "UPDATE projects SET display=false WHERE id=?",
+      projectId,
+    );
   }
 
   async fetchProjectInfo<ProjectInfo>(

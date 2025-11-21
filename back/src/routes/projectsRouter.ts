@@ -61,6 +61,18 @@ projectsRouter.post("/:project_id/stop", async (req, res) => {
 });
 
 /*
+ * Hide project
+ */
+projectsRouter.post("/:project_id/hide", async (req, res) => {
+  const project_id = Number(req.params.project_id);
+  await dbActions.hideProject({
+    projectId: project_id,
+  });
+  console.log(`/${project_id}/hide: project hidden`);
+  res.redirect(`${config.baseUrl}/projects`);
+});
+
+/*
  * Display new project screen (GET request)
  */
 projectsRouter.get("/new", async (req, res) => {

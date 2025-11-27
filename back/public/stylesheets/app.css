@@ -220,6 +220,8 @@ li > div {
   justify-content: center;
   margin: auto;
   align-items: baseline;
+}
+.spacing_div {
   margin: 0 5ch;
 }
 .project_name {

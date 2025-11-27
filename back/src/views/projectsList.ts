@@ -38,7 +38,7 @@ const ProjectCard = async ({
     <div class='project_name'>
       ${project_name}
     </div>
-    <div>
+    <div class='spacing_div'>
       ${hasNullTimer ? StopButton({ project_id }) : StartButton({ project_id })}
     </div>
     <div>

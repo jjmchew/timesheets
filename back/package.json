@@ -5,9 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build": "tsc",
     "start": "tsc && NODE_ENV=production node dist/index.js",
     "dev": "tsx watch src/index.ts",
-    "test": "NODE_ENV=test vitest --config vitest.config.js "
+    "test": "NODE_ENV=test vitest --config vitest.config.js ",
+    "restart": "sudo systemctl stop timesheets.service && tsc && sudo systemctl start timesheets.service"
   },
   "keywords": [],
   "author": "",

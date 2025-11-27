@@ -38,13 +38,13 @@ const ProjectCard = async ({
     <div class='project_name'>
       ${project_name}
     </div>
-    <div>
+    <div class='spacing_div'>
       ${hasNullTimer ? StopButton({ project_id }) : StartButton({ project_id })}
     </div>
     <div>
       <a class='sm' href="${config.baseUrl}/tally/${project_id}">Tally</a>
       <form action="${config.baseUrl}/projects/${project_id}/hide" method='post'>
-        <input class='sm' type='submit' value='Hide'>
+        <input class='sm hideForMobile' type='submit' value='Hide'>
       </form>
     </div>
   </li>

@@ -15,6 +15,7 @@ export const BaseLayout = (
 <head>
   <title>${title}</title>
   <meta charset='utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel='stylesheet' href="${config.baseUrl}/stylesheets/css-reset.css">
   <link rel='stylesheet' href="${config.baseUrl}/stylesheets/app.css">
   <link rel='icon' href="${config.baseUrl}/favicon-16x16.png" type='image/png'>
@@ -22,7 +23,7 @@ export const BaseLayout = (
 
 <body>
   <header>
-      <h1>Timesheets</h1>
+      <h1 class='hideForMobile'>Timesheets</h1>
       <nav>
         ${
           isAuthenticated

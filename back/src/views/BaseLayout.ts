@@ -23,7 +23,7 @@ export const BaseLayout = (
 
 <body>
   <header>
-      <h1>Timesheets</h1>
+      <h1 class='hideForMobile'>Timesheets</h1>
       <nav>
         ${
           isAuthenticated

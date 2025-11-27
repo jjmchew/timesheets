@@ -2,7 +2,7 @@
 
 html {
   font-family: Roboto, Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
 
   color: black;
@@ -16,10 +16,6 @@ html {
   --grey-color: #e5e5e5;
 
   --title_height: 2rem;
-}
-header,
-main {
-  padding: 0.2rem 2rem;
 }
 
 header {
@@ -144,6 +140,7 @@ input.stop {
   padding: 0.5rem;
   border: 1.5px solid;
   border-radius: 8px;
+  /* see responsive */
 }
 input.start {
   border-color: var(--timer_start);
@@ -211,8 +208,8 @@ a.cancel_link {
 /* ============= for projects.erb */
 ul {
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  /* see responsive */
 }
 li {
   margin: 1rem 0;
@@ -223,12 +220,61 @@ li > div {
   justify-content: center;
   margin: auto;
   align-items: baseline;
+  margin: 0 5ch;
 }
 .project_name {
-  width: 25ch;
+  /* width: 25ch;
+  margin: 0 5ch; */
   margin-bottom: 0.3rem;
 }
 section {
   line-height: 1.5rem;
   margin: 0.2rem 0;
+}
+
+/* ============= responsive */
+@media (max-width: 420px) {
+  header {
+    padding: 0.2rem 1rem;
+  }
+  ,
+  main {
+    padding: 0.2rem 0.5rem;
+  }
+
+  .hideForMobile {
+    display: none;
+  }
+
+  ul {
+    justify-content: space-around;
+  }
+
+  input.start,
+  input.stop {
+    padding: 1.5rem;
+  }
+}
+
+@media (min-width: 421px) {
+  header {
+    padding: 0.2rem 2rem;
+  }
+  ,
+  main {
+    padding: 0.2rem 1rem;
+  }
+
+  .hideForMobile {
+    display: inline-block;
+  }
+
+  ul {
+    justify-content: flex-start;
+  }
+
+  input.start,
+  input.stop {
+    padding: 0.5rem;
+  }
 }

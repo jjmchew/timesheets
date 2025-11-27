@@ -44,7 +44,7 @@ const ProjectCard = async ({
     <div>
       <a class='sm' href="${config.baseUrl}/tally/${project_id}">Tally</a>
       <form action="${config.baseUrl}/projects/${project_id}/hide" method='post'>
-        <input class='sm' type='submit' value='Hide'>
+        <input class='sm hideForMobile' type='submit' value='Hide'>
       </form>
     </div>
   </li>
